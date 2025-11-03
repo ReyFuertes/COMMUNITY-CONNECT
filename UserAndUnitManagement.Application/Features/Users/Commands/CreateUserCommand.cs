@@ -6,10 +6,10 @@ namespace UserAndUnitManagement.Application.Features.Users.Commands
 {
     public class CreateUserCommand : IRequest<User>
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
         public UserRole Role { get; set; }
         public bool IsActive { get; set; }
         public bool OptInToDirectory { get; set; }

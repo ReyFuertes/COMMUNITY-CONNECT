@@ -55,6 +55,28 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Pets");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-7890-1234-567890abcde1"),
+                            Breed = "Golden Retriever",
+                            Name = "Buddy",
+                            PhotoUrl = "",
+                            RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Species = "Dog",
+                            UserId = new Guid("d4e5f6a1-b2c3-0987-5432-10fedcba9876")
+                        },
+                        new
+                        {
+                            Id = new Guid("fedcba09-8765-4321-0987-654321fedcb1"),
+                            Breed = "Siamese",
+                            Name = "Whiskers",
+                            PhotoUrl = "",
+                            RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Species = "Cat",
+                            UserId = new Guid("d4e5f6a1-b2c3-0987-5432-10fedcba9876")
+                        });
                 });
 
             modelBuilder.Entity("UserAndUnitManagement.Domain.Entities.Unit", b =>
@@ -95,6 +117,30 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Units");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-7890-1234-567890abcde0"),
+                            Address = "123 Main St",
+                            City = "Anytown",
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Unit 101",
+                            State = "CA",
+                            Status = 0,
+                            ZipCode = "12345"
+                        },
+                        new
+                        {
+                            Id = new Guid("fedcba09-8765-4321-0987-654321fedcb0"),
+                            Address = "456 Oak Ave",
+                            City = "Someville",
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Unit 202",
+                            State = "NY",
+                            Status = 0,
+                            ZipCode = "54321"
+                        });
                 });
 
             modelBuilder.Entity("UserAndUnitManagement.Domain.Entities.User", b =>
@@ -134,12 +180,88 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("ShowEmailInDirectory")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-7890-1234-567890abcdef"),
+                            CreatedDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "superadmin@example.com",
+                            FirstName = "Super",
+                            IsActive = true,
+                            LastName = "Admin",
+                            OptInToDirectory = true,
+                            PasswordHash = "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3",
+                            Role = 0,
+                            Salt = "af72b314-4a9d-4ea3-9bd6-5d5a55e0ce0b",
+                            ShowEmailInDirectory = true
+                        },
+                        new
+                        {
+                            Id = new Guid("b2c3d4e5-f6a1-0987-5432-10fedcba9876"),
+                            CreatedDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "propertymanager@example.com",
+                            FirstName = "Property",
+                            IsActive = true,
+                            LastName = "Manager",
+                            OptInToDirectory = true,
+                            PasswordHash = "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3",
+                            Role = 1,
+                            Salt = "7dda33b8-34f3-4f79-b6c2-73f726b91cb5",
+                            ShowEmailInDirectory = true
+                        },
+                        new
+                        {
+                            Id = new Guid("c3d4e5f6-a1b2-7890-1234-567890abcdef"),
+                            CreatedDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "securityguard@example.com",
+                            FirstName = "Security",
+                            IsActive = true,
+                            LastName = "Guard",
+                            OptInToDirectory = true,
+                            PasswordHash = "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3",
+                            Role = 2,
+                            Salt = "1c64f8b2-fd5c-47d1-bcd5-969b4fe7f819",
+                            ShowEmailInDirectory = true
+                        },
+                        new
+                        {
+                            Id = new Guid("d4e5f6a1-b2c3-0987-5432-10fedcba9876"),
+                            CreatedDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "owner@example.com",
+                            FirstName = "Owner",
+                            IsActive = true,
+                            LastName = "User",
+                            OptInToDirectory = true,
+                            PasswordHash = "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3",
+                            Role = 3,
+                            Salt = "11d07415-1328-4a81-9605-a70fe8332a22",
+                            ShowEmailInDirectory = true
+                        },
+                        new
+                        {
+                            Id = new Guid("e5f6a1b2-c3d4-7890-1234-567890abcdef"),
+                            CreatedDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "tenant@example.com",
+                            FirstName = "Tenant",
+                            IsActive = true,
+                            LastName = "User",
+                            OptInToDirectory = true,
+                            PasswordHash = "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3",
+                            Role = 4,
+                            Salt = "cc4f60ed-23d8-45b6-89bd-6ac9be3c828d",
+                            ShowEmailInDirectory = true
+                        });
                 });
 
             modelBuilder.Entity("UserAndUnitManagement.Domain.Entities.UserUnit", b =>
@@ -205,6 +327,30 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Vehicles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-7890-1234-567890abcde2"),
+                            Color = "Silver",
+                            Make = "Toyota",
+                            Model = "Camry",
+                            PlateNumber = "123-ABC",
+                            RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = new Guid("e5f6a1b2-c3d4-7890-1234-567890abcdef"),
+                            Year = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("fedcba09-8765-4321-0987-654321fedcb2"),
+                            Color = "Black",
+                            Make = "Honda",
+                            Model = "Civic",
+                            PlateNumber = "456-DEF",
+                            RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = new Guid("e5f6a1b2-c3d4-7890-1234-567890abcdef"),
+                            Year = 0
+                        });
                 });
 
             modelBuilder.Entity("UserAndUnitManagement.Domain.Entities.Pet", b =>

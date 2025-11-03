@@ -6,8 +6,11 @@ using UserAndUnitManagement.Application.Features.Pets.Commands;
 using UserAndUnitManagement.Application.Features.Pets.Queries;
 using System.Collections.Generic;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace UserAndUnitManagement.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PetsController : ControllerBase

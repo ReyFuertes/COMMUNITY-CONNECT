@@ -27,8 +27,6 @@ namespace UserAndUnitManagement.Application.Features.Users.Commands
 
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
-            user.Email = request.Email;
-            user.PasswordHash = request.PasswordHash;
             user.Role = request.Role;
             user.IsActive = request.IsActive;
             user.OptInToDirectory = request.OptInToDirectory;

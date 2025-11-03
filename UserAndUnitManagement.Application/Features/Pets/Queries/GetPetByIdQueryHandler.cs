@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UserAndUnitManagement.Application.Features.Pets.Queries
 {
-    public class GetPetByIdQueryHandler : IRequestHandler<GetPetByIdQuery, Pet>
+    public class GetPetByIdQueryHandler : IRequestHandler<GetPetByIdQuery, Pet?>
     {
         private readonly IRepository<Pet> _petRepository;
 
@@ -15,7 +15,7 @@ namespace UserAndUnitManagement.Application.Features.Pets.Queries
             _petRepository = petRepository;
         }
 
-        public async Task<Pet> Handle(GetPetByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Pet?> Handle(GetPetByIdQuery request, CancellationToken cancellationToken)
         {
             return await _petRepository.GetByIdAsync(request.Id);
         }

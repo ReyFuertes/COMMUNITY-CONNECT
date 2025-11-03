@@ -19,6 +19,8 @@ namespace UserAndUnitManagement.Application.Features.Vehicles.Commands
             {
                 Make = request.Make,
                 Model = request.Model,
+                PlateNumber = request.PlateNumber,
+                Color = request.Color,
                 Year = request.Year,
                 UserId = request.UserId
             };

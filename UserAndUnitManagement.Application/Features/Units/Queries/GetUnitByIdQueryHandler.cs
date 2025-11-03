@@ -6,7 +6,7 @@ using Unit = UserAndUnitManagement.Domain.Entities.Unit;
 
 namespace UserAndUnitManagement.Application.Features.Units.Queries
 {
-    public class GetUnitByIdQueryHandler : IRequestHandler<GetUnitByIdQuery, Unit>
+    public class GetUnitByIdQueryHandler : IRequestHandler<GetUnitByIdQuery, Unit?>
     {
         private readonly IRepository<Unit> _unitRepository;
 
@@ -15,7 +15,7 @@ namespace UserAndUnitManagement.Application.Features.Units.Queries
             _unitRepository = unitRepository;
         }
 
-        public async Task<Unit> Handle(GetUnitByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Unit?> Handle(GetUnitByIdQuery request, CancellationToken cancellationToken)
         {
             return await _unitRepository.GetByIdAsync(request.Id);
         }

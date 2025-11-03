@@ -1,10 +1,10 @@
 using MediatR;
-using UserAndUnitManagement.Domain.Entities;
 using System;
+using UserAndUnitManagement.Application.Features.Users.Dtos;
 
 namespace UserAndUnitManagement.Application.Features.Users.Queries
 {
-    public class GetUserByIdQuery : IRequest<User>
+    public class GetUserByIdQuery : IRequest<UserDto?>
     {
         public Guid Id { get; set; }
     }

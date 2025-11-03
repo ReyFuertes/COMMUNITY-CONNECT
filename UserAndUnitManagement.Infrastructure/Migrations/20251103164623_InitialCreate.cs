@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace UserAndUnitManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -39,6 +41,7 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salt = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -124,6 +127,45 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Units",
+                columns: new[] { "Id", "Address", "City", "CreatedDate", "LastModifiedDate", "Name", "State", "Status", "ZipCode" },
+                values: new object[,]
+                {
+                    { new Guid("a1b2c3d4-e5f6-7890-1234-567890abcde0"), "123 Main St", "Anytown", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Unit 101", "CA", 0, "12345" },
+                    { new Guid("fedcba09-8765-4321-0987-654321fedcb0"), "456 Oak Ave", "Someville", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Unit 202", "NY", 0, "54321" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CreatedDate", "Email", "FirstName", "IsActive", "LastModifiedDate", "LastName", "OptInToDirectory", "PasswordHash", "Role", "Salt", "ShowEmailInDirectory" },
+                values: new object[,]
+                {
+                    { new Guid("a1b2c3d4-e5f6-7890-1234-567890abcdef"), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "superadmin@example.com", "Super", true, null, "Admin", true, "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3", 0, "af72b314-4a9d-4ea3-9bd6-5d5a55e0ce0b", true },
+                    { new Guid("b2c3d4e5-f6a1-0987-5432-10fedcba9876"), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "propertymanager@example.com", "Property", true, null, "Manager", true, "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3", 1, "7dda33b8-34f3-4f79-b6c2-73f726b91cb5", true },
+                    { new Guid("c3d4e5f6-a1b2-7890-1234-567890abcdef"), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "securityguard@example.com", "Security", true, null, "Guard", true, "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3", 2, "1c64f8b2-fd5c-47d1-bcd5-969b4fe7f819", true },
+                    { new Guid("d4e5f6a1-b2c3-0987-5432-10fedcba9876"), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "owner@example.com", "Owner", true, null, "User", true, "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3", 3, "11d07415-1328-4a81-9605-a70fe8332a22", true },
+                    { new Guid("e5f6a1b2-c3d4-7890-1234-567890abcdef"), new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "tenant@example.com", "Tenant", true, null, "User", true, "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3", 4, "cc4f60ed-23d8-45b6-89bd-6ac9be3c828d", true }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Pets",
+                columns: new[] { "Id", "Breed", "Name", "PhotoUrl", "RegistrationDate", "Species", "UserId" },
+                values: new object[,]
+                {
+                    { new Guid("a1b2c3d4-e5f6-7890-1234-567890abcde1"), "Golden Retriever", "Buddy", "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Dog", new Guid("d4e5f6a1-b2c3-0987-5432-10fedcba9876") },
+                    { new Guid("fedcba09-8765-4321-0987-654321fedcb1"), "Siamese", "Whiskers", "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Cat", new Guid("d4e5f6a1-b2c3-0987-5432-10fedcba9876") }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Vehicles",
+                columns: new[] { "Id", "Color", "ExpirationDate", "Make", "Model", "PlateNumber", "RegistrationDate", "UserId", "Year" },
+                values: new object[,]
+                {
+                    { new Guid("a1b2c3d4-e5f6-7890-1234-567890abcde2"), "Silver", null, "Toyota", "Camry", "123-ABC", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("e5f6a1b2-c3d4-7890-1234-567890abcdef"), 0 },
+                    { new Guid("fedcba09-8765-4321-0987-654321fedcb2"), "Black", null, "Honda", "Civic", "456-DEF", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("e5f6a1b2-c3d4-7890-1234-567890abcdef"), 0 }
                 });
 
             migrationBuilder.CreateIndex(

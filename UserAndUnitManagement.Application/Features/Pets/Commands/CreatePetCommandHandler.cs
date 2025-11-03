@@ -19,6 +19,8 @@ namespace UserAndUnitManagement.Application.Features.Pets.Commands
             {
                 Name = request.Name,
                 Species = request.Species,
+                Breed = request.Breed,
+                PhotoUrl = request.PhotoUrl,
                 UserId = request.UserId
             };
 

@@ -4,7 +4,7 @@ using System;
 
 namespace UserAndUnitManagement.Application.Features.Vehicles.Queries
 {
-    public class GetVehicleByIdQuery : IRequest<Vehicle>
+    public class GetVehicleByIdQuery : IRequest<Vehicle?>
     {
         public Guid Id { get; set; }
     }

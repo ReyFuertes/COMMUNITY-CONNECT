@@ -9,8 +9,11 @@ using UserAndUnitManagement.Application.Features.Units.Commands;
 using Unit = UserAndUnitManagement.Domain.Entities.Unit;
 
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace UserAndUnitManagement.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UnitsController : ControllerBase

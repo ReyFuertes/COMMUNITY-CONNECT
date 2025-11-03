@@ -12,8 +12,8 @@ using UserAndUnitManagement.Infrastructure.Persistence;
 namespace UserAndUnitManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251103110846_AddSeedData")]
-    partial class AddSeedData
+    [Migration("20251103164623_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,7 +68,7 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                             PhotoUrl = "",
                             RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Species = "Dog",
-                            UserId = new Guid("a1b2c3d4-e5f6-7890-1234-567890abcdef")
+                            UserId = new Guid("d4e5f6a1-b2c3-0987-5432-10fedcba9876")
                         },
                         new
                         {
@@ -78,7 +78,7 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                             PhotoUrl = "",
                             RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Species = "Cat",
-                            UserId = new Guid("a1b2c3d4-e5f6-7890-1234-567890abcdef")
+                            UserId = new Guid("d4e5f6a1-b2c3-0987-5432-10fedcba9876")
                         });
                 });
 
@@ -183,6 +183,10 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("ShowEmailInDirectory")
                         .HasColumnType("bit");
 
@@ -194,28 +198,72 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("a1b2c3d4-e5f6-7890-1234-567890abcdef"),
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "john.doe@example.com",
-                            FirstName = "John",
-                            IsActive = false,
-                            LastName = "Doe",
-                            OptInToDirectory = false,
-                            PasswordHash = "...",
+                            CreatedDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "superadmin@example.com",
+                            FirstName = "Super",
+                            IsActive = true,
+                            LastName = "Admin",
+                            OptInToDirectory = true,
+                            PasswordHash = "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3",
                             Role = 0,
-                            ShowEmailInDirectory = false
+                            Salt = "af72b314-4a9d-4ea3-9bd6-5d5a55e0ce0b",
+                            ShowEmailInDirectory = true
                         },
                         new
                         {
-                            Id = new Guid("fedcba09-8765-4321-0987-654321fedcba"),
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "jane.smith@example.com",
-                            FirstName = "Jane",
-                            IsActive = false,
-                            LastName = "Smith",
-                            OptInToDirectory = false,
-                            PasswordHash = "...",
-                            Role = 0,
-                            ShowEmailInDirectory = false
+                            Id = new Guid("b2c3d4e5-f6a1-0987-5432-10fedcba9876"),
+                            CreatedDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "propertymanager@example.com",
+                            FirstName = "Property",
+                            IsActive = true,
+                            LastName = "Manager",
+                            OptInToDirectory = true,
+                            PasswordHash = "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3",
+                            Role = 1,
+                            Salt = "7dda33b8-34f3-4f79-b6c2-73f726b91cb5",
+                            ShowEmailInDirectory = true
+                        },
+                        new
+                        {
+                            Id = new Guid("c3d4e5f6-a1b2-7890-1234-567890abcdef"),
+                            CreatedDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "securityguard@example.com",
+                            FirstName = "Security",
+                            IsActive = true,
+                            LastName = "Guard",
+                            OptInToDirectory = true,
+                            PasswordHash = "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3",
+                            Role = 2,
+                            Salt = "1c64f8b2-fd5c-47d1-bcd5-969b4fe7f819",
+                            ShowEmailInDirectory = true
+                        },
+                        new
+                        {
+                            Id = new Guid("d4e5f6a1-b2c3-0987-5432-10fedcba9876"),
+                            CreatedDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "owner@example.com",
+                            FirstName = "Owner",
+                            IsActive = true,
+                            LastName = "User",
+                            OptInToDirectory = true,
+                            PasswordHash = "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3",
+                            Role = 3,
+                            Salt = "11d07415-1328-4a81-9605-a70fe8332a22",
+                            ShowEmailInDirectory = true
+                        },
+                        new
+                        {
+                            Id = new Guid("e5f6a1b2-c3d4-7890-1234-567890abcdef"),
+                            CreatedDate = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "tenant@example.com",
+                            FirstName = "Tenant",
+                            IsActive = true,
+                            LastName = "User",
+                            OptInToDirectory = true,
+                            PasswordHash = "f0f5a997d1989792669861758ace216ebf1b48587376b7cc5e6b59cc8180cda3",
+                            Role = 4,
+                            Salt = "cc4f60ed-23d8-45b6-89bd-6ac9be3c828d",
+                            ShowEmailInDirectory = true
                         });
                 });
 
@@ -292,7 +340,7 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                             Model = "Camry",
                             PlateNumber = "123-ABC",
                             RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("fedcba09-8765-4321-0987-654321fedcba"),
+                            UserId = new Guid("e5f6a1b2-c3d4-7890-1234-567890abcdef"),
                             Year = 0
                         },
                         new
@@ -303,7 +351,7 @@ namespace UserAndUnitManagement.Infrastructure.Migrations
                             Model = "Civic",
                             PlateNumber = "456-DEF",
                             RegistrationDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("fedcba09-8765-4321-0987-654321fedcba"),
+                            UserId = new Guid("e5f6a1b2-c3d4-7890-1234-567890abcdef"),
                             Year = 0
                         });
                 });

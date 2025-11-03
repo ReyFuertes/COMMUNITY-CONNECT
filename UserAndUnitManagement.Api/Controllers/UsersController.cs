@@ -5,6 +5,9 @@ using MediatR;
 using UserAndUnitManagement.Application.Features.Users.Commands;
 using UserAndUnitManagement.Application.Features.Users.Queries;
 
+using Microsoft.AspNetCore.Authorization;
+using UserAndUnitManagement.Application.Features.Users.Dtos;
+
 namespace UserAndUnitManagement.Api.Controllers
 {
     [ApiController]
@@ -20,40 +23,74 @@ namespace UserAndUnitManagement.Api.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
-            var users = await _mediator.Send(new GetAllUsersQuery());
-            return Ok(users);
+            var userDtos = await _mediator.Send(new GetAllUsersQuery());
+            return Ok(userDtos);
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(Guid id)
+        public async Task<ActionResult<UserDto>> GetUser(Guid id)
         {
-            var user = await _mediator.Send(new GetUserByIdQuery { Id = id });
-            if (user == null)
+            var userDto = await _mediator.Send(new GetUserByIdQuery { Id = id });
+            if (userDto == null)
             {
                 return NotFound();
             }
-            return Ok(user);
+            return Ok(userDto);
         }
 
         // POST: api/Users
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(CreateUserCommand command)
+        public async Task<ActionResult<UserDto>> PostUser(CreateUserDto createUserDto)
         {
+            var command = new CreateUserCommand
+            {
+                FirstName = createUserDto.FirstName,
+                LastName = createUserDto.LastName,
+                Email = createUserDto.Email,
+                Password = createUserDto.Password,
+                Role = (Domain.Entities.UserRole)createUserDto.Role,
+                IsActive = createUserDto.IsActive,
+                OptInToDirectory = createUserDto.OptInToDirectory,
+                ShowEmailInDirectory = createUserDto.ShowEmailInDirectory
+            };
             var user = await _mediator.Send(command);
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            var userDto = new UserDto
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = (int)user.Role,
+                IsActive = user.IsActive,
+                CreatedDate = user.CreatedDate,
+                LastModifiedDate = user.LastModifiedDate,
+                OptInToDirectory = user.OptInToDirectory,
+                ShowEmailInDirectory = user.ShowEmailInDirectory
+            };
+            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, userDto);
         }
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(Guid id, UpdateUserCommand command)
+        public async Task<IActionResult> PutUser(Guid id, UpdateUserDto updateUserDto)
         {
-            if (id != command.Id)
+            if (id != updateUserDto.Id)
             {
                 return BadRequest();
             }
+            var command = new UpdateUserCommand
+            {
+                Id = updateUserDto.Id,
+                FirstName = updateUserDto.FirstName,
+                LastName = updateUserDto.LastName,
+                Role = (Domain.Entities.UserRole)updateUserDto.Role,
+                IsActive = updateUserDto.IsActive,
+                OptInToDirectory = updateUserDto.OptInToDirectory,
+                ShowEmailInDirectory = updateUserDto.ShowEmailInDirectory
+            };
             await _mediator.Send(command);
             return NoContent();
         }
