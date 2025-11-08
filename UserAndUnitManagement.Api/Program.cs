@@ -9,12 +9,14 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+           .ConfigureWarnings(warnings => warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -55,9 +57,10 @@ builder.Services.AddSwaggerGen(c =>
 
 });
 builder.Services.AddControllers();
+builder.Services.AddHealthChecks();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var secretKey = Encoding.ASCII.GetBytes(jwtSettings["Secret"]!);
+var secretKey = Encoding.ASCII.GetBytes(builder.Configuration["JwtSettings:Secret"]!);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -83,10 +86,10 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
   var services = scope.ServiceProvider;
+  var logger = services.GetRequiredService<ILogger<Program>>();
   var context = services.GetRequiredService<ApplicationDbContext>();
   context.Database.Migrate();
 }
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -95,11 +98,12 @@ if (app.Environment.IsDevelopment())
   app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();

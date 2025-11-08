@@ -1,6 +1,7 @@
 {
   "name": "UserAndUnitManagement DB",
-  "dockerComposeFile": "../docker-compose.yml",
+  "dockerComposeFile": "../../docker-compose.yml",
   "service": "db",
-  "workspaceFolder": "/var/opt/mssql"
+  "workspaceFolder": "/var/opt/mssql",
+  "remoteUser": "root"
 }

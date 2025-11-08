@@ -27,7 +27,7 @@ namespace UserAndUnitManagement.Application.Features.Users.Commands
             using (var sha256 = SHA256.Create())
             {
                 // Hash the password with the salt
-                var passwordWithSalt = request.Password + salt;
+                var passwordWithSalt = request.Password.Trim() + salt;
                 var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(passwordWithSalt));
                 var passwordHash = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
 
@@ -36,7 +36,7 @@ namespace UserAndUnitManagement.Application.Features.Users.Commands
                     Id = Guid.NewGuid(),
                     FirstName = request.FirstName,
                     LastName = request.LastName,
-                    Email = request.Email,
+                    Email = request.Email.Trim(),
                     PasswordHash = passwordHash,
                     Salt = salt,
                     Role = request.Role,

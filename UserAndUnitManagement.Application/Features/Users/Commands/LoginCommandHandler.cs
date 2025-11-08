@@ -22,7 +22,7 @@ namespace UserAndUnitManagement.Application.Features.Users.Commands
 
         public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetUserByEmail(request.Email);
+            var user = await _userRepository.GetUserByEmail(request.Email.Trim());
 
             if (user == null)
             {
@@ -31,7 +31,7 @@ namespace UserAndUnitManagement.Application.Features.Users.Commands
 
             using (var sha256 = SHA256.Create())
             {
-                var passwordWithSalt = request.Password + user.Salt;
+                var passwordWithSalt = request.Password.Trim() + user.Salt;
                 var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(passwordWithSalt));
                 var hashedPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
 
