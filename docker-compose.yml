@@ -1,22 +1,22 @@
 services:
-  userandunitmanagement-api-dev:
-    image: ${DOCKER_REGISTRY-}userandunitmanagementapi
+  communityconnect-userandunitmgmtapi-dev:
+    image: ${DOCKER_REGISTRY-}communityconnect-userandunitmgmtapi
     build:
-      context: .
-      dockerfile: UserAndUnitManagement.Api/Dockerfile
+      context: UserAndUnitManagement
+      dockerfile: UserAndUnitManagement.Api/CommunityConnect.UserAndUnitMgmtAPI.Dockerfile
     ports:
       - "8081:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8081
-      - "ConnectionStrings:DefaultConnection=Server=db-dev;Database=UserAndUnitManagementDb;User Id=sa;Password=5Tmb-_zJryCV)yLv)NNw;MultipleActiveResultSets=true;TrustServerCertificate=True"
+      - "ConnectionStrings:DefaultConnection=Server=communityconnect-db-dev;Database=UserAndUnitManagementDb;User Id=sa;Password=5Tmb-_zJryCV)yLv)NNw;MultipleActiveResultSets=true;TrustServerCertificate=True"
     volumes:
       - .:/src
     depends_on:
-      db-dev:
+      communityconnect-db-dev:
         condition: service_healthy
     profiles: ["development"]
-    entrypoint: ["dotnet", "UserAndUnitManagement.Api.dll"]
+    entrypoint: ["dotnet", "CommunityConnect.UserAndUnitMgmtAPI.dll"]
     command: []
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
@@ -25,10 +25,10 @@ services:
       retries: 5
       start_period: 30s
 
-  gateway-dev:
-    image: ${DOCKER_REGISTRY-}communityconnectgateway
+  communityconnect-gateway-dev:
+    image: ${DOCKER_REGISTRY-}communityconnect-gateway
     build:
-      context: ../Gateway
+      context: Gateway
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -36,11 +36,11 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
     depends_on:
-      userandunitmanagement-api-dev:
+      communityconnect-userandunitmgmtapi-dev:
         condition: service_healthy
     profiles: ["development"]
 
-  db-dev:
+  communityconnect-db-dev:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     environment:
       SA_PASSWORD: '5Tmb-_zJryCV)yLv)NNw'
@@ -54,67 +54,3 @@ services:
       retries: 5
       start_period: 60s
     profiles: ["development"]
-
-  userandunitmanagement.api-staging:
-    image: ${DOCKER_REGISTRY-}userandunitmanagementapi
-    build:
-      context: .
-      dockerfile: UserAndUnitManagement.Api/Dockerfile
-    ports:
-      - "7087:443"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Staging
-      - ASPNETCORE_URLS=http://+:8080
-      - "ConnectionStrings:DefaultConnection=Server=db-staging;Database=UserAndUnitManagementDbStaging;User Id=sa;Password=5Tmb-_zJryCV)yLv)NNw;MultipleActiveResultSets=true;TrustServerCertificate=True"
-      - JWTSETTINGS__SECRET=a-very-long-and-super-secret-key-for-staging
-    depends_on:
-      db-staging:
-        condition: service_healthy
-    profiles: ["staging"]
-
-  db-staging:
-    image: "mcr.microsoft.com/mssql/server:2022-latest"
-    environment:
-      SA_PASSWORD: '5Tmb-_zJryCV)yLv)NNw'
-      ACCEPT_EULA: 'Y'
-    ports:
-      - "1433:1433"
-    healthcheck:
-      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "5Tmb-_zJryCV)yLv)NNw", "-Q", "SELECT 1", "-C"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 60s
-    profiles: ["staging"]
-
-  userandunitmanagement.api-prod:
-    image: ${DOCKER_REGISTRY-}userandunitmanagementapi
-    build:
-      context: .
-      dockerfile: UserAndUnitManagement.Api/Dockerfile
-    ports:
-      - "7087:443"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:8080
-      - "ConnectionStrings:DefaultConnection=Server=db-prod;Database=UserAndUnitManagementDbProduction;User Id=sa;Password=5Tmb-_zJryCV)yLv)NNw;MultipleActiveResultSets=true;TrustServerCertificate=True"
-      - JWTSETTINGS__SECRET=a-very-long-and-super-secret-key-for-production
-    depends_on:
-      db-prod:
-        condition: service_healthy
-    profiles: ["production"]
-
-  db-prod:
-    image: "mcr.microsoft.com/mssql/server:2022-latest"
-    environment:
-      SA_PASSWORD: '5Tmb-_zJryCV)yLv)NNw'
-      ACCEPT_EULA: 'Y'
-    ports:
-      - "1433:1433"
-    healthcheck:
-      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "5Tmb-_zJryCV)yLv)NNw", "-Q", "SELECT 1", "-C"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 60s
-    profiles: ["production"]

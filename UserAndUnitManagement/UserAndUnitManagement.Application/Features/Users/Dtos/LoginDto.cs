@@ -2,8 +2,8 @@ namespace UserAndUnitManagement.Application.Features.Users.Dtos
 {
     public class LoginDto
     {
-        private string _email;
-        private string _password;
+        private string _email = string.Empty;
+        private string _password = string.Empty;
 
         public required string Email
         {
