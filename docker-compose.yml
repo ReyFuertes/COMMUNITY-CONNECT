@@ -1,11 +1,13 @@
+networks:
+  internal_network:
+    driver: bridge
+
 services:
   communityconnect-userandunitmgmtapi-dev:
     image: ${DOCKER_REGISTRY-}communityconnect-userandunitmgmtapi
     build:
       context: UserAndUnitManagement
       dockerfile: UserAndUnitManagement.Api/CommunityConnect.UserAndUnitMgmtAPI.Dockerfile
-    ports:
-      - "8081:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8081
@@ -24,6 +26,8 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
+    networks:
+      - internal_network
 
   communityconnect-gateway-dev:
     image: ${DOCKER_REGISTRY-}communityconnect-gateway
@@ -39,14 +43,14 @@ services:
       communityconnect-userandunitmgmtapi-dev:
         condition: service_healthy
     profiles: ["development"]
+    networks:
+      - internal_network
 
   communityconnect-db-dev:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     environment:
       SA_PASSWORD: '5Tmb-_zJryCV)yLv)NNw'
       ACCEPT_EULA: 'Y'
-    ports:
-      - "1433:1433"
     healthcheck:
       test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "5Tmb-_zJryCV)yLv)NNw", "-Q", "SELECT 1", "-C"]
       interval: 10s
@@ -54,3 +58,5 @@ services:
       retries: 5
       start_period: 60s
     profiles: ["development"]
+    networks:
+      - internal_network
