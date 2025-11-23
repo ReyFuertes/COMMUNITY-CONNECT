@@ -1,3 +1,4 @@
+version: '3.8'
 networks:
   internal_network:
     driver: bridge
@@ -7,18 +8,18 @@ services:
     image: ${DOCKER_REGISTRY-}communityconnectuserandunitmgmtapi
     build:
       context: UserAndUnitManagement
-      dockerfile: UserAndUnitManagement.Api/CommunityConnect.UserAndUnitMgmtAPI.Dockerfile
+      dockerfile: UserAndUnitManagement.Api/UserAndUnitManagement.Api.Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8081
-      - "ConnectionStrings:DefaultConnection=Server=communityconnect-db-dev;Database=UserAndUnitManagementDb;User Id=sa;Password=${DB_PASSWORD};MultipleActiveResultSets=true;TrustServerCertificate=True"
+      - "ConnectionStrings:DefaultConnection=Server=communityconnect-db-dev;Database=UserAndUnitManagementDb;User Id=sa;Password=5Tmb-_zJryCV)yLv)NNw;MultipleActiveResultSets=true;Encrypt=False;TrustServerCertificate=True;Integrated Security=False"
     volumes:
       - .:/src
     depends_on:
       communityconnect-db-dev:
         condition: service_healthy
     profiles: ["development"]
-    entrypoint: ["dotnet", "CommunityConnect.UserAndUnitMgmtAPI.dll"]
+    entrypoint: ["dotnet", "UserAndUnitManagement.Api.dll"]
     command: []
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
@@ -26,6 +27,8 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
+    ports:
+      - "8081:8081"
     restart: on-failure
     networks:
       - internal_network
@@ -51,10 +54,10 @@ services:
   communityconnect-db-dev:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     environment:
-      SA_PASSWORD: '${DB_PASSWORD}'
+      SA_PASSWORD: '5Tmb-_zJryCV)yLv)NNw'
       ACCEPT_EULA: 'Y'
     healthcheck:
-      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "${DB_PASSWORD}", "-Q", "SELECT 1", "-C"]
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "5Tmb-_zJryCV)yLv)NNw", "-Q", "SELECT 1", "-C"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -68,11 +71,11 @@ services:
     image: ${DOCKER_REGISTRY-}communityconnectuserandunitmgmtapi
     build:
       context: UserAndUnitManagement
-      dockerfile: UserAndUnitManagement.Api/CommunityConnect.UserAndUnitMgmtAPI.Dockerfile
+      dockerfile: UserAndUnitManagement.Api/UserAndUnitManagement.Api.Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Staging
       - ASPNETCORE_URLS=http://+:8080
-      - "ConnectionStrings:DefaultConnection=Server=communityconnect-db-staging;Database=UserAndUnitManagementDbStaging;User Id=sa;Password=${DB_PASSWORD};MultipleActiveResultSets=true;TrustServerCertificate=True"
+      - "ConnectionStrings:DefaultConnection=Server=communityconnect-db-staging;Database=UserAndUnitManagementDbStaging;User Id=sa;Password=5Tmb-_zJryCV)yLv)NNw;MultipleActiveResultSets=true;TrustServerCertificate=True"
       - JWTSETTINGS__SECRET=a-very-long-and-super-secret-key-for-staging
     depends_on:
       communityconnect-db-staging:
@@ -85,10 +88,10 @@ services:
   communityconnect-db-staging:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     environment:
-      SA_PASSWORD: '${DB_PASSWORD}'
+      SA_PASSWORD: '5Tmb-_zJryCV)yLv)NNw'
       ACCEPT_EULA: 'Y'
     healthcheck:
-      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "${DB_PASSWORD}", "-Q", "SELECT 1", "-C"]
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "5Tmb-_zJryCV)yLv)NNw", "-Q", "SELECT 1", "-C"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -102,11 +105,11 @@ services:
     image: ${DOCKER_REGISTRY-}communityconnectuserandunitmgmtapi
     build:
       context: UserAndUnitManagement
-      dockerfile: UserAndUnitManagement.Api/CommunityConnect.UserAndUnitMgmtAPI.Dockerfile
+      dockerfile: UserAndUnitManagement.Api/UserAndUnitManagement.Api.Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
-      - "ConnectionStrings:DefaultConnection=Server=communityconnect-db-prod;Database=UserAndUnitManagementDbProduction;User Id=sa;Password=${DB_PASSWORD};MultipleActiveResultSets=true;TrustServerCertificate=True"
+      - "ConnectionStrings:DefaultConnection=Server=communityconnect-db-prod;Database=UserAndUnitManagementDbProduction;User Id=sa;Password=5Tmb-_zJryCV)yLv)NNw;MultipleActiveResultSets=true;TrustServerCertificate=True"
       - JWTSETTINGS__SECRET=a-very-long-and-super-secret-key-for-production
     depends_on:
       communityconnect-db-prod:
@@ -119,10 +122,10 @@ services:
   communityconnect-db-prod:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     environment:
-      SA_PASSWORD: '${DB_PASSWORD}'
+      SA_PASSWORD: '5Tmb-_zJryCV)yLv)NNw'
       ACCEPT_EULA: 'Y'
     healthcheck:
-      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "${DB_PASSWORD}", "-Q", "SELECT 1", "-C"]
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "5Tmb-_zJryCV)yLv)NNw", "-Q", "SELECT 1", "-C"]
       interval: 10s
       timeout: 5s
       retries: 5

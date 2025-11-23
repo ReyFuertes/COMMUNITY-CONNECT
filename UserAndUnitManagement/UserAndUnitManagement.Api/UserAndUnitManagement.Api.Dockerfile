@@ -11,20 +11,20 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["UserAndUnitManagement.Api/CommunityConnect.UserAndUnitMgmtAPI.csproj", "UserAndUnitManagement.Api/"]
+COPY ["UserAndUnitManagement.Api/UserAndUnitManagement.Api.csproj", "UserAndUnitManagement.Api/"]
 COPY ["UserAndUnitManagement.Application/UserAndUnitManagement.Application.csproj", "UserAndUnitManagement.Application/"]
 COPY ["UserAndUnitManagement.Domain/UserAndUnitManagement.Domain.csproj", "UserAndUnitManagement.Domain/"]
 COPY ["UserAndUnitManagement.Infrastructure/UserAndUnitManagement.Infrastructure.csproj", "UserAndUnitManagement.Infrastructure/"]
-RUN dotnet restore "UserAndUnitManagement.Api/CommunityConnect.UserAndUnitMgmtAPI.csproj"
+RUN dotnet restore "UserAndUnitManagement.Api/UserAndUnitManagement.Api.csproj"
 COPY . .
 WORKDIR "/src/UserAndUnitManagement.Api"
-RUN dotnet build "CommunityConnect.UserAndUnitMgmtAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "UserAndUnitManagement.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "CommunityConnect.UserAndUnitMgmtAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "UserAndUnitManagement.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "CommunityConnect.UserAndUnitMgmtAPI.dll"]
+ENTRYPOINT ["dotnet", "UserAndUnitManagement.Api.dll"]
