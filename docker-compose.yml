@@ -33,6 +33,30 @@ services:
     networks:
       - internal_network
 
+  communityconnect-communicationhub-api-dev:
+    image: ${DOCKER_REGISTRY-}communityconnectcommunicationhubapi
+    build:
+      context: CommunicationHub
+      dockerfile: CommunicationHub.Api/CommunicationHub.Api.Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8082
+      - "ConnectionStrings:DefaultConnection=Server=communityconnect-db-dev;Database=CommunicationHubDb;User Id=sa;Password=5Tmb-_zJryCV)yLv)NNw;MultipleActiveResultSets=true;Encrypt=False;TrustServerCertificate=True;Integrated Security=False"
+      - JWTSETTINGS__SECRET=a-very-long-and-super-secret-key-for-development
+    volumes:
+      - .:/src
+    depends_on:
+      communityconnect-db-dev:
+        condition: service_healthy
+    profiles: ["development"]
+    entrypoint: ["dotnet", "CommunicationHub.Api.dll"]
+    command: []
+    ports:
+      - "8082:8082"
+    restart: on-failure
+    networks:
+      - internal_network
+
   communityconnect-gateway-dev:
     image: ${DOCKER_REGISTRY-}communityconnect-gateway
     build:
@@ -46,6 +70,10 @@ services:
     depends_on:
       communityconnect-userandunitmgmtapi-dev:
         condition: service_healthy
+      communityconnect-communicationhub-api-dev:
+        condition: service_healthy
+      communityconnect-maintenanceservice-api-dev:
+        condition: service_healthy # Add dependency for the new service
     profiles: ["development"]
     networks:
       - internal_network
