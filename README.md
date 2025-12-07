@@ -26,6 +26,11 @@ Community Connect is a microservices-based application designed to manage users,
     -   `CommunicationHub.Domain`: Domain entities (Announcements, Messages).
     -   `CommunicationHub.Infrastructure`: EF Core and repository implementations.
     -   `CommunicationHub.Client`: A console application for testing real-time SignalR notifications.
+-   `MaintenanceService`: A microservice for handling work orders, maintenance requests, and issue tracking.
+    -   `MaintenanceService.Api`: The API layer.
+    -   `MaintenanceService.Application`: Business logic and MediatR handlers for work orders.
+    -   `MaintenanceService.Domain`: Domain entities (WorkOrder, Attachments) and enums.
+    -   `MaintenanceService.Infrastructure`: EF Core persistence and repositories.
 
 ## Setup Instructions
 

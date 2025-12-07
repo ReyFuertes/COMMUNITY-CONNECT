@@ -57,6 +57,35 @@ services:
     networks:
       - internal_network
 
+  communityconnect-maintenanceservice-api-dev:
+    image: ${DOCKER_REGISTRY-}communityconnectmaintenanceserviceapi
+    build:
+      context: MaintenanceService
+      dockerfile: MaintenanceService.Api/MaintenanceService.Api.Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8083
+      - "ConnectionStrings:MaintenanceDbConnection=Server=communityconnect-db-dev;Database=MaintenanceDb;User Id=sa;Password=5Tmb-_zJryCV)yLv)NNw;MultipleActiveResultSets=true;Encrypt=False;TrustServerCertificate=True;Integrated Security=False"
+    volumes:
+      - .:/src
+    depends_on:
+      communityconnect-db-dev:
+        condition: service_healthy
+    profiles: ["development"]
+    entrypoint: ["dotnet", "MaintenanceService.Api.dll"]
+    command: []
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "8083:8083"
+    restart: on-failure
+    networks:
+      - internal_network
+
   communityconnect-gateway-dev:
     image: ${DOCKER_REGISTRY-}communityconnect-gateway
     build:
