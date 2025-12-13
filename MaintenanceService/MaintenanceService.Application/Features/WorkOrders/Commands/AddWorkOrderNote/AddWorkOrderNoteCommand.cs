@@ -6,6 +6,6 @@ namespace MaintenanceService.Application.Features.WorkOrders.Commands.AddWorkOrd
 public record AddWorkOrderNoteCommand : IRequest<WorkOrderDto>
 {
     public Guid WorkOrderId { get; init; }
-    public string Content { get; init; }
+    public required string Content { get; init; }
     public Guid CreatedBy { get; init; }
 }

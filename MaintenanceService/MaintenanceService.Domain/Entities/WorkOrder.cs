@@ -5,7 +5,7 @@ namespace MaintenanceService.Domain.Entities;
 
 public class WorkOrder : BaseEntity
 {
-    public string Description { get; set; }
+    public required string Description { get; set; }
     public WorkOrderCategory Category { get; set; }
     public WorkOrderUrgency UrgencyLevel { get; set; }
     public WorkOrderStatus Status { get; set; }

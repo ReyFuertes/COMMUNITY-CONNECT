@@ -5,7 +5,7 @@ namespace MaintenanceService.Application.Dtos;
 public class WorkOrderDto
 {
     public Guid Id { get; set; }
-    public string Description { get; set; }
+    public required string Description { get; set; }
     public WorkOrderCategory Category { get; set; }
     public WorkOrderUrgency UrgencyLevel { get; set; }
     public WorkOrderStatus Status { get; set; }

@@ -6,7 +6,7 @@ namespace MaintenanceService.Application.Features.WorkOrders.Commands.SubmitWork
 
 public record SubmitWorkOrderCommand : IRequest<WorkOrderDto>
 {
-    public string Description { get; init; }
+    public required string Description { get; init; }
     public WorkOrderCategory Category { get; init; }
     public WorkOrderUrgency UrgencyLevel { get; init; }
     public Guid UnitId { get; init; }
