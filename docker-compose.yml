@@ -145,6 +145,41 @@ services:
     networks:
       - internal_network
 
+  communityconnect-bookingservice-api-dev:
+    image: ${DOCKER_REGISTRY-}communityconnectbookingserviceapi
+    build:
+      context: BookingService
+      dockerfile: BookingService.Api/BookingService.Api.Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8086
+      - "ConnectionStrings:DefaultConnection=Server=communityconnect-db-dev;Database=BookingServiceDb;User Id=sa;Password=5Tmb-_zJryCV)yLv)NNw;MultipleActiveResultSets=true;Encrypt=False;TrustServerCertificate=True;Integrated Security=False"
+      - "FinanceService:BaseUrl=http://communityconnect-financeservice-api-dev:8084"
+      - "CommunicationHub:BaseUrl=http://communityconnect-communicationhub-api-dev:8082"
+    volumes:
+      - .:/src
+    depends_on:
+      communityconnect-db-dev:
+        condition: service_healthy
+      communityconnect-financeservice-api-dev:
+        condition: service_healthy
+      communityconnect-communicationhub-api-dev:
+        condition: service_healthy
+    profiles: ["development"]
+    entrypoint: ["dotnet", "BookingService.Api.dll"]
+    command: []
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "8086:8086"
+    restart: on-failure
+    networks:
+      - internal_network
+
   communityconnect-gateway-dev:
     image: ${DOCKER_REGISTRY-}communityconnect-gateway
     build:
@@ -165,6 +200,8 @@ services:
       communityconnect-financeservice-api-dev:
         condition: service_healthy
       communityconnect-securityservice-api-dev:
+        condition: service_healthy
+      communityconnect-bookingservice-api-dev:
         condition: service_healthy
     profiles: ["development"]
     networks:

@@ -41,6 +41,11 @@ Community Connect is a microservices-based application designed to manage users,
     -   `SecurityService.Application`: Business logic for visitor passes, QR code generation, and parcel logging.
     -   `SecurityService.Domain`: Domain entities (VisitorPass, VisitLog, Parcel).
     -   `SecurityService.Infrastructure`: EF Core persistence, QR code generation service, and notification client.
+-   `BookingService`: A microservice for managing facility and amenity bookings.
+    -   `BookingService.Api`: The API layer for amenity and booking management.
+    -   `BookingService.Application`: Business logic for creating bookings, applying rules, and managing amenities.
+    -   `BookingService.Domain`: Domain entities (Amenity, Booking, BookingRule).
+    -   `BookingService.Infrastructure`: EF Core persistence, integration clients for FinanceService and CommunicationHub.
 
 ## Setup Instructions
 
@@ -69,6 +74,7 @@ Once the Docker containers are up and running, the services will be accessible a
 -   **MaintenanceService API**: `http://localhost:8083`
 -   **FinanceService API**: `http://localhost:8084`
 -   **SecurityService API**: `http://localhost:8085`
+-   **BookingService API**: `http://localhost:8086`
 
 ## Testing Real-Time Notifications
 
@@ -87,6 +93,7 @@ Each microservice provides Swagger UI for easy exploration:
 -   **MaintenanceService Swagger UI**: `http://localhost:8083/swagger`
 -   **FinanceService Swagger UI**: `http://localhost:8084/swagger`
 -   **SecurityService Swagger UI**: `http://localhost:8085/swagger`
+-   **BookingService Swagger UI**: `http://localhost:8086/swagger`
 
 ## FinanceService Specifics
 
@@ -173,3 +180,50 @@ The API generates a unique access code (string) for visitor passes. Frontend app
 Security personnel can use a dedicated application (mobile/tablet) to:
 *   Scan visitor QR codes to check guests in/out.
 *   Log new parcels and upload photos.
+
+## BookingService Specifics
+
+The BookingService manages the booking of shared community facilities and amenities.
+
+### Integrations
+
+*   **FinanceService**: Used for handling booking fees and security deposits. When a booking with a fee is created, the BookingService initiates a payment request to the FinanceService.
+*   **CommunicationHub**: Used for sending notifications to residents regarding booking confirmations, approvals, rejections, and other status updates.
+*   **UserAndUnitManagement**: Integrates with this service to validate Resident and Unit IDs when creating bookings.
+
+### Configuration
+
+The BookingService needs to know the base URLs of the services it integrates with. Configure these in `BookingService/BookingService.Api/appsettings.Development.json` (or environment variables for production):
+
+```json
+{
+  "FinanceService": {
+    "BaseUrl": "http://communityconnect-financeservice-api-dev:8084"
+  },
+  "CommunicationHub": {
+    "BaseUrl": "http://communityconnect-communicationhub-api-dev:8082"
+  },
+  "UserAndUnitManagement": {
+    "BaseUrl": "http://communityconnect-userandunitmgmtapi-dev:8081"
+  }
+}
+```
+
+*   **`FinanceService:BaseUrl`**: The base URL of the FinanceService API.
+*   **`CommunicationHub:BaseUrl`**: The base URL of the CommunicationHub API.
+*   **`UserAndUnitManagement:BaseUrl`**: The base URL of the UserAndUnitManagement API.
+
+### Booking Rules Engine
+
+Administrators can set various rules for each amenity, such as:
+*   Maximum booking duration (e.g., "2 hours").
+*   Capacity limits (e.g., "10 people").
+*   Blackout dates (e.g., no bookings on holidays).
+
+These rules are checked automatically when a resident attempts to create a booking.
+
+### Approval Workflow
+
+Some amenities can be configured to require admin approval for bookings, while others can be auto-approved.
+
+---
