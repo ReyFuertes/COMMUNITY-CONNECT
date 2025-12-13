@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y curl
 USER app
 WORKDIR /app
 EXPOSE 8087
+HEALTHCHECK --interval=30s --timeout=10s --retries=5 --start-period=30s CMD curl -f http://localhost:8087/health || exit 1
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
